@@ -3,6 +3,8 @@ package Controlador;
 
 import java.io.*;
 
+import Modelo.Empleado;
+import Modelo.EmpleadoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -12,6 +14,9 @@ import jakarta.servlet.annotation.*;
  * @author avazquezs1902
  */
 public class Validar extends HttpServlet {
+
+    EmpleadoDAO edao = new EmpleadoDAO();
+    Empleado em = new Empleado();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -76,7 +81,18 @@ public class Validar extends HttpServlet {
             String user = request.getParameter("txtuser");
             String pass = request.getParameter("txtpass");
 
-        }else {
+            em = edao.validar(user,pass);
+            if (em.getUser() !=null){
+                /**
+                 * cuadno es valido o existe nos lleva
+                 * al controlador
+                 */
+                request.getRequestDispatcher("Controlador?accion=Principal").forward(request,response);
+
+            }else {
+                request.getRequestDispatcher("index.jsp").forward(request,response);
+            }
+        }else { request.getRequestDispatcher("index.jsp").forward(request,response);
 
         }
     }
